@@ -1,5 +1,15 @@
 import React, { useMemo, useState } from "react";
-import { SafeAreaView, View, Text, StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  InputAccessoryView,
+  Pressable,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Visualizer } from "./src/components/Visualizer";
 import {
@@ -47,34 +57,42 @@ export default function App() {
         <Text style={styles.subtitle}>Customize inhale / hold / exhale</Text>
       </View>
 
-      <Visualizer
-        phase={phase}
-        durations={durations}
-        remainingSeconds={remainingSeconds}
-      />
+      <Visualizer phase={phase} />
 
       <View style={styles.readout}>
         <Text style={styles.phase}>{phaseLabel}</Text>
         <Text style={styles.timer}>{remainingSeconds}s</Text>
       </View>
 
-      <View style={styles.controlsRow}>
-        <DurationInput
-          label="Inhale"
-          value={String(durations.inhale)}
-          onChange={(v) => handleChange("inhale", v)}
-        />
-        <DurationInput
-          label="Hold"
-          value={String(durations.hold)}
-          onChange={(v) => handleChange("hold", v)}
-        />
-        <DurationInput
-          label="Exhale"
-          value={String(durations.exhale)}
-          onChange={(v) => handleChange("exhale", v)}
-        />
-      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.select({ ios: "padding", android: undefined })}
+        keyboardVerticalOffset={
+          Platform.select({ ios: 64, android: 0 }) as number
+        }
+      >
+        <View style={styles.controlsRow}>
+          <DurationInput
+            label="Inhale"
+            value={String(durations.inhale)}
+            onChange={(v) => handleChange("inhale", v)}
+            inputAccessoryViewID="doneAccessory"
+          />
+          <View style={styles.spacerHorizontal} />
+          <DurationInput
+            label="Hold"
+            value={String(durations.hold)}
+            onChange={(v) => handleChange("hold", v)}
+            inputAccessoryViewID="doneAccessory"
+          />
+          <View style={styles.spacerHorizontal} />
+          <DurationInput
+            label="Exhale"
+            value={String(durations.exhale)}
+            onChange={(v) => handleChange("exhale", v)}
+            inputAccessoryViewID="doneAccessory"
+          />
+        </View>
+      </KeyboardAvoidingView>
 
       <View style={styles.buttonsRow}>
         {isRunning ? (
@@ -84,6 +102,19 @@ export default function App() {
         )}
         <SecondaryButton label="Reset" onPress={reset} />
       </View>
+
+      {Platform.OS === "ios" && (
+        <InputAccessoryView nativeID="doneAccessory">
+          <View style={styles.accessoryBar}>
+            <Pressable
+              onPress={Keyboard.dismiss}
+              style={styles.accessoryButton}
+            >
+              <Text style={styles.accessoryText}>Done</Text>
+            </Pressable>
+          </View>
+        </InputAccessoryView>
+      )}
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>Tip: Try 4-4-6 or 4-7-8 patterns</Text>
@@ -129,15 +160,34 @@ const styles = StyleSheet.create({
   },
   controlsRow: {
     flexDirection: "row",
-    gap: 12,
     justifyContent: "space-between",
     marginTop: 20,
   },
   buttonsRow: {
     flexDirection: "row",
-    gap: 12,
     justifyContent: "center",
     marginTop: 16,
+  },
+  spacerHorizontal: {
+    width: 12,
+  },
+  accessoryBar: {
+    backgroundColor: "#111827",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: "#334155",
+    alignItems: "flex-end",
+  },
+  accessoryButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: "#2563eb",
+    borderRadius: 8,
+  },
+  accessoryText: {
+    color: "white",
+    fontWeight: "700",
   },
   footer: {
     alignItems: "center",

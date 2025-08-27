@@ -8,3 +8,4 @@ export const DEFAULT_DURATIONS: Durations = {
 
 export const MIN_SECONDS = 0;
 export const MAX_SECONDS = 60;
+

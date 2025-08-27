@@ -4,6 +4,7 @@
     "slug": "ctrl-alt-breathwork",
     "version": "1.0.0",
     "orientation": "portrait",
+    "jsEngine": "jsc",
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#0b1221"

@@ -5,9 +5,15 @@ type Props = {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  inputAccessoryViewID?: string;
 };
 
-export const DurationInput: React.FC<Props> = ({ label, value, onChange }) => {
+export const DurationInput: React.FC<Props> = ({
+  label,
+  value,
+  onChange,
+  inputAccessoryViewID,
+}) => {
   return (
     <View style={styles.durationBox}>
       <Text style={styles.durationLabel}>{label}</Text>
@@ -19,6 +25,9 @@ export const DurationInput: React.FC<Props> = ({ label, value, onChange }) => {
         maxLength={2}
         placeholder="0"
         placeholderTextColor="#6b7280"
+        inputAccessoryViewID={inputAccessoryViewID}
+        returnKeyType="done"
+        blurOnSubmit
       />
       <Text style={styles.secondsLabel}>sec</Text>
     </View>
