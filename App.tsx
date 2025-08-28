@@ -57,7 +57,11 @@ export default function App() {
         <Text style={styles.subtitle}>Customize inhale / hold / exhale</Text>
       </View>
 
-      <Visualizer phase={phase} />
+      <Visualizer
+        phase={phase}
+        durations={durations}
+        remainingSeconds={remainingSeconds}
+      />
 
       <View style={styles.readout}>
         <Text style={styles.phase}>{phaseLabel}</Text>
